@@ -165,29 +165,6 @@ table.t{border-collapse:collapse;width:100%;min-width:720px;font-size:13px}
 </style>
 </head>
 <body>
-<header class="rbar">
-  <div class="rrow">
-    <div class="rtitle"><b>Hub Map · Geography Prototype</b><span>Aspen Institute Community Strategies Group · prepared by Cornershop Creative · for review</span></div>
-    <div class="ctl" role="tablist" aria-label="View"><span class="lbl">View</span><div class="seg" id="viewSeg">
-      <button role="tab" data-view="proto" aria-selected="true">Prototype</button>
-      <button role="tab" data-view="system" aria-selected="false">System</button>
-      <button role="tab" data-view="interact" aria-selected="false">Interactions</button>
-      <button role="tab" data-view="impl" aria-selected="false">Implementation</button>
-    </div></div>
-    
-  </div>
-  <div class="scen" id="scenBar">
-    <span class="lbl" style="color:inherit">Scenario</span>
-    <button data-scen="1">1 Default</button>
-    <button data-scen="2">2 Appalachia</button>
-    <button data-scen="3">3 Appalachia + MDC</button>
-    <button data-scen="4a">4A Indigenous-serving</button>
-    <button data-scen="4b">4B + Hub selected</button>
-    <button data-scen="5">5 Region + Hub + tribal lands</button>
-    <button data-scen="5s">5 Stress test (illustrative)</button>
-    <span class="cap" id="scenCap" aria-live="polite"></span>
-  </div>
-</header>
 
 <main class="main">
   <!-- PROTOTYPE -->
@@ -219,111 +196,10 @@ table.t{border-collapse:collapse;width:100%;min-width:720px;font-size:13px}
         <aside class="panel" id="panel" aria-live="polite" aria-label="Results"></aside>
       </div>
     </div>
-    <div class="notes">
-      <div class="note"><h3>Data used in this prototype</h3><ul>
-        <li><b>States:</b> U.S. Census cartographic boundaries via us-atlas 3.0.1 (Albers USA, Alaska and Hawaii inset).</li>
-        <li><b>Appalachia:</b> merged Census county shapes for the Appalachian Regional Commission counties (Wikipedia's ARC list, 420 counties, plus 8 Virginia independent cities). ARC currently lists 423, so reconcile with arc.gov before launch.</li>
-        <li><b>Tribal lands:</b> Census TIGERweb AIANNH (current): 312 federal reservations, 177 off-reservation trust lands, 10 state reservations and 74 Hawaiian Home Lands as legal areas. 287 statistical areas (Oklahoma, Alaska Native village, state- and tribal-designated) are drawn differently.</li>
-      </ul></div>
-      <div class="note"><h3>Hub data, provisional</h3><ul>
-        <li>119 Hubs and their states come from the live aspencsg.org map. <b>MDC's 13 states are verified from that map</b>: AL, AR, FL, GA, KY, LA, MS, NC, SC, TN, TX, VA, WV.</li>
-        <li><b>Indigenous-serving:</b> 9 Hubs, the 7 the current map labels with a nation plus Oweesta Corporation and NACDC Financial Services, which the map notes as national Native intermediaries. The Hubs sheet has 17 and should replace this list.</li>
-        <li><b>Appalachia membership</b> (11 Hubs) is inferred: Hubs serving West Virginia plus Hubs named for Appalachia. Funders, other regions and most descriptions are pending the Hubs sheet.</li>
-      </ul></div>
-      
-    </div>
-  </section>
+    </section>
 
-  <!-- SYSTEM -->
-  <section id="v-system" data-v="system" hidden>
-    <div class="view-head"><h1>Map visualization system</h1><p>Map styling expressed as tokens and rules so it can go straight into Figma components and the SVG implementation.</p></div>
-    <div class="doc"><h2>Layer styles</h2><div class="tw"><table class="t" id="sysT"></table></div></div>
-    <div class="three">
-      <div class="doc"><h2>Layer order (bottom → top)</h2><ol class="layers">
-        <li>Base states: one muted slate-blue, no distinction between states with and without Hubs</li>
-        <li>Selected Hub footprint: sage fill + diagonal hatch</li>
-        <li>Tribal lands (only when Indigenous-serving is on)</li>
-        <li>Interior state borders (fade to 35% when tribal lands are on)</li>
-        <li>Focus dim: everything outside region ∪ footprint, one step darker</li>
-        <li>Footprint merged outer edge</li>
-        <li>Selected state or region: dark casing, then blue line, with a 16% blue tint inside</li>
-        <li>Hover outline</li>
-        <li>State labels and callouts</li>
-      </ol></div>
-      <div class="doc"><h2>Legend behavior</h2><ul>
-        <li><b>Default:</b> no legend. The map is one tone, and the tooltip carries the Hub count.</li>
-        <li><b>State or region selected:</b> one item, the selected boundary.</li>
-        <li><b>Hub selected:</b> adds the footprint item and the disclaimer "Highlighted states show where Hubs work, not necessarily statewide coverage."</li>
-        <li><b>Indigenous-serving on:</b> adds tribal lands (legal areas and statistical areas as separate items) and the note that they are reference geography, not Hub service areas.</li>
-        <li>Each swatch is drawn with the same SVG treatment as the map, and items appear in layer order.</li>
-      </ul></div>
-      <div class="doc"><h2>Non-color cues</h2><ul>
-        <li><b>Region or state:</b> thick cased line. It's the only thick line on the map.</li>
-        <li><b>Hub footprint:</b> 45° hatch + thin light edge.</li>
-        <li><b>Tribal legal areas:</b> solid fill with light edge, and small areas get a minimum-size diamond.</li>
-        <li><b>Tribal statistical areas:</b> dashed edge, no fill.</li>
-        <li><b>Hover:</b> white outline + tooltip. Selection is never shown by color alone.</li>
-        <li><b>Map label:</b> the map's text label always names the active layers, for screen readers.</li>
-      </ul></div>
-    </div>
-    <div class="doc"><h2>Details worth keeping</h2><ul>
-      <li><b>Small states:</b> VT, NH, MA, RI, CT, NJ, DE, MD and DC get callout labels with leader lines. Hover and selection still work on the shape itself, and keyboard users reach them by arrow key.</li>
-      <li><b>Small tribal areas:</b> areas below about 1 px on screen get a 2.4 px diamond marker so they don't disappear. They keep the official Census name in the tooltip.</li>
-      <li><b>Large footprints:</b> the hatch is low-contrast and the edge is merged, so a 13-state Hub reads as one calm shape. Focus dimming keeps the rest of the country from competing.</li>
-      <li><b>Alaska and Hawaii insets:</b> they follow the same rules. Region boundaries never cross into the insets.</li>
-      <li><b>Narrow screens:</b> the map spans full width and the panel stacks below it. Under 600 px, the agreed mobile list view takes over.</li>
-    </ul></div>
-  </section>
-
-  <!-- INTERACTIONS -->
-  <section id="v-interact" data-v="interact" hidden>
-    <div class="view-head"><h1>Interaction specification</h1><p>What changes on the map, in the panel and in the legend for each action. The Prototype view implements all of these.</p></div>
-    <div class="doc"><div class="tw"><table class="t" id="intT"></table></div></div>
-    <div class="doc"><h2>Rules that resolve the tricky cases</h2><ul>
-      <li><b>One browsing context at a time</b> (a state or a region), plus at most one selected Hub. Selecting a Hub never replaces the context, and deselecting returns to it exactly.</li>
-      <li><b>A map click always means "browse this state".</b> It switches to the States tab, clears the region and closes any open Hub. Clicking the selected state again clears it.</li>
-      <li><b>Indigenous-serving filters the list and adds the tribal reference layer.</b> It never changes the browsing context. If the context has no matching Hubs, the panel says so and offers to show them nationwide while keeping the context drawn.</li>
-      <li><b>Tribal areas are not clickable.</b> They have hover and focus tooltips with the official Census name and area type, because they are reference geography, not a way to browse Hubs.</li>
-      <li><b>Hubs with no assigned region</b> are still found through the States and Hubs tabs, search and the Indigenous-serving filter. The card says "No region assigned" and never infers one.</li>
-    </ul></div>
-  </section>
-
-  <!-- IMPLEMENTATION -->
-  <section id="v-impl" data-v="impl" hidden>
-    <div class="view-head"><h1>Technical implementation notes</h1><p>Recommended approach for the WordPress build, and where we still need answers.</p></div>
-    <div class="doc"><h2>Recommended approach: custom SVG from TopoJSON, no map framework</h2>
-      <p>This prototype is that approach. It uses topojson-client (about 10 KB) to decode one pre-projected topology and ordinary SVG for every layer. There's no tile server, API key or mapping framework, and it works as a single enqueued script inside the existing WordPress page.</p>
-      <ul>
-        <li><b>Build step (Node, run when boundaries change):</b> us-atlas or the Census cartographic boundary file, then mapshaper or topojson to simplify. Regions are made by merging county FIPS lists, and TIGER AIANNH layers are clipped and simplified. The output is one ~200 KB topology.</li>
-        <li><b>Runtime:</b> footprints are merged on the fly with <code>topojson.merge</code>, so any Hub's states make one outline. The region outline shares arcs with the state borders, so boundaries line up exactly.</li>
-        <li><b>Data:</b> Google Sheet → WordPress Hub post type → JSON endpoint (Hubs, state codes, region slugs, funders, Indigenous-serving flag). Geography stays in the static topology.</li>
-        <li><b>Accessibility:</b> the map is one tab stop with roving focus (arrow keys move between states, Enter selects). Every map action has a toolbar equivalent, and live regions announce changes.</li>
-        <li><b>Use MapLibre only if</b> the client later wants zooming to reservation or county detail. It's not needed for the current scope.</li>
-      </ul></div>
-    <div class="three">
-      <div class="doc"><h2>Can implement confidently</h2><ul>
-        <li>State selection, hover, roving keyboard focus and tooltips</li>
-        <li>Appalachia from ARC county list, merged in the build step</li>
-        <li>Footprint merge, hatch patterns, casing, focus dim (SVG mask)</li>
-        <li>Contextual legend generated from the same tokens</li>
-        <li>Tribal reference layer from TIGER AIANNH, refreshed yearly</li>
-        <li>Responsive layout and mobile list fallback</li>
-      </ul></div>
-      <div class="doc"><h2>Needs technical investigation</h2><ul>
-        <li>Total payload on slow connections: test the ~200 KB topology plus the WordPress page. Consider lazy-loading the tribal layer.</li>
-        <li>Very small reservations and rancherias: marker sizing and hover targets on touch screens</li>
-        <li>Rendering performance of the 860 tribal shapes plus the mask on older mobile devices</li>
-        <li>GA4 events for map interactions versus list interactions</li>
-      </ul></div>
-      <div class="doc"><h2>Needs client clarification</h2><ul>
-        <li>County lists for the other nine regions, especially Black Belt, Southwest and Plains, which have no official definition</li>
-        <li>Appalachia: confirm the ARC definition and the current 423-county list</li>
-        <li>Which tribal area types to show. Statistical areas include Oklahoma (where Census still uses OTSAs) and Alaska Native villages. Also confirm wording and whether names appear on hover</li>
-        <li>The 17 Indigenous-serving Hubs and any nation associations to show on cards</li>
-        <li>Whether a map click in Regions view should switch to States (as specified) or stay in the region</li>
-      </ul></div>
-    </div>
-  </section>
+  
+  
 </main>
 
 <script src="https://cdn.jsdelivr.net/npm/topojson-client@3.1.0/dist/topojson-client.min.js"></script>
@@ -561,13 +437,13 @@ mainMap.svg.addEventListener("pointermove",e=>{const r=wrap.getBoundingClientRec
 mainMap.svg.addEventListener("pointerleave",()=>{hov.style.display="none";tip.hidden=true;});
 mainMap.svg.addEventListener("click",e=>{const hit=e.target.closest(".hit");if(hit){A.state(hit.dataset.id);render();}});
 const ORDER=Object.keys(NAME).sort((a,b)=>NAME[a].localeCompare(NAME[b]));let kf=-1;
-mainMap.svg.addEventListener("keydown",e=>{if(["ArrowRight","ArrowDown","ArrowLeft","ArrowUp"].includes(e.key)){kf=(kf+(e.key==="ArrowRight"||e.key==="ArrowDown"?1:-1)+ORDER.length)%ORDER.length;const id=ORDER[kf];hov.setAttribute("d",SPATH[id]);hov.style.display="";const c=G.labels[id];const sx=wrap.clientWidth/975;stateTip(id,c[0]*sx,c[1]*sx);document.getElementById("scenCap").textContent=`Keyboard focus: ${NAME[id]}. Press Enter to select.`;e.preventDefault();}
+mainMap.svg.addEventListener("keydown",e=>{if(["ArrowRight","ArrowDown","ArrowLeft","ArrowUp"].includes(e.key)){kf=(kf+(e.key==="ArrowRight"||e.key==="ArrowDown"?1:-1)+ORDER.length)%ORDER.length;const id=ORDER[kf];hov.setAttribute("d",SPATH[id]);hov.style.display="";const c=G.labels[id];const sx=wrap.clientWidth/975;stateTip(id,c[0]*sx,c[1]*sx);e.preventDefault();}
   if(e.key==="Enter"&&kf>=0){A.state(ORDER[kf]);render();}});
 mainMap.svg.addEventListener("blur",()=>{hov.style.display="none";tip.hidden=true;});
 
 // ---------- scenarios ----------
 const CAP={"1":"Default. One muted tone for every state, no legend, hover for counts.","2":"Regions → Appalachia. The ARC boundary is a cased blue line with a light tint, and states outside the region step back.","3":"Appalachia + MDC (13 states, verified from the live map). The footprint is hatched with one merged edge, and the Appalachia line stays on top.","4a":"Indigenous-serving on, nationwide. State borders fade, Census tribal lands appear, and the list filters to 9 provisional Hubs.","4b":"Indigenous-serving + Chinle Planting Hope selected (Navajo Nation; AZ, NM, UT). Footprint hatch under tribal lands, which stay reference-only.","5":"Appalachia + Indigenous-serving. No matching Hubs in the region, so the panel offers nationwide results while Appalachia stays drawn, then Chinle Planting Hope is selected.","5s":"Stress test with an ILLUSTRATIVE sample Hub in NC, TN and GA (not real data), so all three layers overlap around the Eastern Band of Cherokee lands in western North Carolina."};
-function clearScen(){document.querySelectorAll("[data-scen]").forEach(b=>b.setAttribute("aria-pressed","false"));document.getElementById("scenCap").textContent="";}
+function clearScen(){return;document.querySelectorAll("[data-scen]").forEach(b=>b.setAttribute("aria-pressed","false"));document.getElementById("scenCap").textContent="";}
 function scenario(k){A.reset();
   if(k==="2"){A.region("appalachia");}
   if(k==="3"){A.region("appalachia");S.hub="MDC";}
@@ -620,11 +496,11 @@ function buildSystem(){const rows=[
  document.getElementById("intT").innerHTML=`<thead><tr><th>Action</th><th>Map</th><th>Panel</th><th>Legend</th></tr></thead><tbody>${I.map(r=>`<tr><th scope="row">${r[0]}</th><td>${r[1]}</td><td>${r[2]}</td><td>${r[3]}</td></tr>`).join("")}</tbody>`;}
 
 // ---------- views ----------
-function showView(v){document.querySelectorAll("[data-view]").forEach(b=>b.setAttribute("aria-selected",b.dataset.view===v));document.querySelectorAll("section[data-v]").forEach(s=>s.hidden=s.dataset.v!==v);
+function showView(v){return;document.querySelectorAll("[data-view]").forEach(b=>b.setAttribute("aria-selected",b.dataset.view===v));document.querySelectorAll("section[data-v]").forEach(s=>s.hidden=s.dataset.v!==v);
   document.getElementById("scenBar").hidden=v!=="proto";
   }
-buildEval();buildSystem();
-const h0=(location.hash||"").replace("#","");if(["system","interact","impl"].includes(h0))showView(h0);
+
+
 render();
 })();
 </script>
