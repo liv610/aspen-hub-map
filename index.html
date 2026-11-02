@@ -170,17 +170,11 @@ table.t{border-collapse:collapse;width:100%;min-width:720px;font-size:13px}
     <div class="rtitle"><b>Hub Map · Geography Prototype</b><span>Aspen Institute Community Strategies Group · prepared by Cornershop Creative · for review</span></div>
     <div class="ctl" role="tablist" aria-label="View"><span class="lbl">View</span><div class="seg" id="viewSeg">
       <button role="tab" data-view="proto" aria-selected="true">Prototype</button>
-      <button role="tab" data-view="compare" aria-selected="false">Treatments</button>
       <button role="tab" data-view="system" aria-selected="false">System</button>
       <button role="tab" data-view="interact" aria-selected="false">Interactions</button>
       <button role="tab" data-view="impl" aria-selected="false">Implementation</button>
     </div></div>
-    <div class="ctl" id="trtCtl"><span class="lbl">Treatment</span><div class="seg" id="trtSeg">
-      <button data-trt="A" aria-pressed="false" title="Region outline + solid Hub fills">A</button>
-      <button data-trt="B" aria-pressed="false" title="Region outline + Hub outlines">B</button>
-      <button data-trt="C" aria-pressed="false" title="Region outline + hatched Hub states">C</button>
-      <button data-trt="D" aria-pressed="true" title="Recommended: cased region boundary + hatched footprint with merged edge + focus dimming">D ★</button>
-    </div></div>
+    
   </div>
   <div class="scen" id="scenBar">
     <span class="lbl" style="color:inherit">Scenario</span>
@@ -240,32 +234,9 @@ table.t{border-collapse:collapse;width:100%;min-width:720px;font-size:13px}
     </div>
   </section>
 
-  <!-- TREATMENTS -->
-  <section id="v-compare" data-v="compare" hidden>
-    <div class="view-head"><h1>Four cartographic treatments, same geography</h1><p>Each panel renders the same state through the same engine, so only the treatment changes. Switch the scenario to stress-test each one.</p></div>
-    <div class="ctl" style="margin-bottom:12px"><span class="lbl">Scenario</span><div class="seg" id="cmpScen">
-      <button data-cs="mdc" aria-pressed="true">Appalachia + MDC</button>
-      <button data-cs="stress" aria-pressed="false">Appalachia + Indigenous-serving Hub + tribal lands</button>
-    </div></div>
-    <div class="cmpgrid" id="cmpGrid"></div>
-    <div class="doc" style="margin-top:16px"><h2>Evaluation</h2>
-      <div class="tw"><table class="t" id="evalT"></table></div>
-    </div>
-    <div class="doc"><h2>Recommendation: Treatment D</h2>
-      <p>D separates the questions the brief asks by using a different <b>form</b> for each layer, so the map still reads without color:</p>
-      <ul>
-        <li><b>"Where am I exploring?"</b> is one continuous boundary line, blue with a dark casing so it stays visible over any fill. Nothing else on the map is drawn as a thick line.</li>
-        <li><b>"Where does this Hub work?"</b> is a filled, hatched area with one merged outer edge. Thirteen MDC states read as one footprint, not thirteen separate shapes competing with the region.</li>
-        <li><b>"How do they relate?"</b> is answered by drawing order and focus. The region line always sits above the footprint, and everything outside region ∪ footprint is dimmed one step, so the overlap and the parts beyond the region are both obvious.</li>
-        <li><b>Tribal lands</b> are small solid warm shapes, a third form that is neither line nor hatch. Statistical areas are dashed so they never read as legal boundaries.</li>
-      </ul>
-      <p>A is the most familiar, but the fills bury the region and depend on color. B is the lightest, but two outline systems fight along state lines and the footprint has no "inside". C fixes color dependence but stays busy because every state border is redrawn. D keeps C's pattern and removes that noise.</p>
-    </div>
-  </section>
-
   <!-- SYSTEM -->
   <section id="v-system" data-v="system" hidden>
-    <div class="view-head"><h1>Recommended visualization system (Treatment D)</h1><p>Map styling expressed as tokens and rules so it can go straight into Figma components and the SVG implementation.</p></div>
+    <div class="view-head"><h1>Map visualization system</h1><p>Map styling expressed as tokens and rules so it can go straight into Figma components and the SVG implementation.</p></div>
     <div class="doc"><h2>Layer styles</h2><div class="tw"><table class="t" id="sysT"></table></div></div>
     <div class="three">
       <div class="doc"><h2>Layer order (bottom → top)</h2><ol class="layers">
@@ -547,7 +518,7 @@ function toolbar(){document.querySelectorAll(".tab").forEach(b=>{const on=b.data
 const mainMap=makeMap(document.getElementById("mapwrap"));
 function render(focusCard){toolbar();renderMap(mainMap,S,S.trt);document.getElementById("legend").innerHTML=legendHTML(S,S.trt);
   document.getElementById("panel").innerHTML=panelHTML();
-  document.querySelectorAll("#trtSeg button").forEach(b=>b.setAttribute("aria-pressed",b.dataset.trt===S.trt));
+  
   if(focusCard){const h=document.getElementById("cardH");if(h){h.focus({preventScroll:true});h.closest(".card").scrollIntoView({block:"nearest"});}}}
 const A={
  state(id){if(S.state===id&&!S.hub){S.state=null;}else{S.state=id;}S.tab="states";S.region=null;S.hub=null;S.nat=false;},
@@ -623,7 +594,7 @@ const EV=[["Immediate comprehensibility",[4,"Fills read instantly"],[3,"Footprin
  ["Implementation feasibility",[5,"Simplest"],[5,"Simple"],[4,"Patterns"],[4,"Patterns + merge + mask"]],
  ["Large overlapping areas",[2,"Region lost under fills"],[2,"Lines tangle"],[3,"Readable, busy"],[5,"Built for it"]],
  ["Nationwide scale",[3,"OK"],[2,"Thin dashes vanish"],[3,"OK"],[4,"Dim keeps focus"]]];
-function buildEval(){const t=document.getElementById("evalT");t.innerHTML=`<thead><tr><th>Criterion</th><th>A · Fills</th><th>B · Outlines</th><th>C · Hatch</th><th>D · Recommended</th></tr></thead><tbody>${EV.map(([c,...v])=>`<tr><th scope="row">${c}</th>${v.map(([n,w])=>`<td>${R5(n)}<span class="why">${w}</span></td>`).join("")}</tr>`).join("")}<tr><th scope="row">Total</th>${[0,1,2,3].map(i=>`<td><b>${EV.reduce((s,r)=>s+r[i+1][0],0)} / 40</b></td>`).join("")}</tr></tbody>`;}
+function buildEval(){const t=document.getElementById("evalT");if(!t)return;t.innerHTML=`<thead><tr><th>Criterion</th><th>A · Fills</th><th>B · Outlines</th><th>C · Hatch</th><th>D · Recommended</th></tr></thead><tbody>${EV.map(([c,...v])=>`<tr><th scope="row">${c}</th>${v.map(([n,w])=>`<td>${R5(n)}<span class="why">${w}</span></td>`).join("")}</tr>`).join("")}<tr><th scope="row">Total</th>${[0,1,2,3].map(i=>`<td><b>${EV.reduce((s,r)=>s+r[i+1][0],0)} / 40</b></td>`).join("")}</tr></tbody>`;}
 
 // ---------- system + interaction tables ----------
 function swb(s){return `<span class="swbox">${s}</span>`;}
@@ -650,10 +621,10 @@ function buildSystem(){const rows=[
 
 // ---------- views ----------
 function showView(v){document.querySelectorAll("[data-view]").forEach(b=>b.setAttribute("aria-selected",b.dataset.view===v));document.querySelectorAll("section[data-v]").forEach(s=>s.hidden=s.dataset.v!==v);
-  document.getElementById("scenBar").hidden=v!=="proto";document.getElementById("trtCtl").hidden=v!=="proto";
-  if(v==="compare"&&!document.getElementById("cmpGrid").children.length)buildCompare();}
+  document.getElementById("scenBar").hidden=v!=="proto";
+  }
 buildEval();buildSystem();
-const h0=(location.hash||"").replace("#","");if(["compare","system","interact","impl"].includes(h0))showView(h0);
+const h0=(location.hash||"").replace("#","");if(["system","interact","impl"].includes(h0))showView(h0);
 render();
 })();
 </script>

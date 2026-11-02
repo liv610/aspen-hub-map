@@ -11,8 +11,8 @@ An interactive prototype of how the Rural Development Hubs map shows states, reg
    - Appalachia + MDC
    - Indigenous-serving, with and without a Hub selected
    - Three overlapping layers
-2. Switch **Treatment A–D** to compare four ways of drawing overlapping layers. D is recommended.
-3. The **Treatments**, **System**, **Interactions** and **Implementation** tabs explain the comparison, the visual rules and the build approach.
+2. The map uses one consistent treatment for overlapping layers: a cased boundary for the selected state or region, and a hatched footprint for the selected Hub.
+3. The **System**, **Interactions** and **Implementation** tabs explain the visual rules, the interaction behavior and the build approach.
 4. Everything is clickable: states on the map, the tabs, the menus, search, the Indigenous-serving toggle, the Hub rows, Hide and Reset map.
 
 ## Data
