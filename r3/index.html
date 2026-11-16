@@ -139,6 +139,11 @@ header.top p{margin:4px 0 0;color:var(--ink2);max-width:62ch}
 .emp p{margin:4px 0 10px;color:var(--ink2)}
 .acts2{display:flex;flex-wrap:wrap;gap:8px}
 /* dev strip */
+.proto{border:1px dashed #4A6272;border-radius:12px;padding:14px 14px 4px;margin-bottom:18px}
+.proto.end{margin:18px 0 0;padding-bottom:14px}.proto.end .dev{margin-top:0}
+.ptag{display:inline-block;font-size:11px;font-weight:800;letter-spacing:.08em;text-transform:uppercase;color:#C9D6DE;background:#24384A;border-radius:4px;padding:3px 8px;margin-bottom:10px}
+.buildtag{display:flex;align-items:center;gap:8px;font-size:11px;font-weight:800;letter-spacing:.08em;text-transform:uppercase;color:var(--sel);margin:0 0 8px}
+.buildtag::after{content:"";flex:1;height:1px;background:#2E5A73}
 .dev{margin-top:14px;display:grid;grid-template-columns:auto 1fr;gap:4px 12px;font-size:13px;color:var(--ink3);background:var(--surf);border:1px solid var(--line);border-radius:8px;padding:10px 14px}
 .dev code{color:var(--ink);font-size:13px;word-break:break-all}
 .toast{position:fixed;left:50%;bottom:24px;transform:translateX(-50%);background:#F2F6F8;color:#0B141B;padding:10px 16px;border-radius:8px;font-size:14px;box-shadow:0 8px 24px rgba(0,0,0,.5);z-index:50;max-width:calc(100vw - 32px)}
@@ -150,11 +155,13 @@ header.top p{margin:4px 0 0;color:var(--ink2);max-width:62ch}
 </head>
 <body>
 <div class="page">
-<header class="top"><div><h1>Rural Development Hubs map · clickable prototype</h1><p>Round 3 behavior for the developer. Every control works. Pair it with the behavior spec; where they disagree, the spec wins.</p></div><a href="https://claude.ai/artifact/JX93LsmiNmBVP49KE6nCF1" target="_blank" rel="noopener">Open the behavior spec →</a></header>
+<section class="proto" aria-label="Prototype-only tools"><div class="ptag">Prototype only · not part of the build</div><header class="top"><div><h1>Rural Development Hubs map · clickable prototype</h1><p>Round 3 behavior for the developer. Every control works. Pair it with the behavior spec; where they disagree, the spec wins.</p></div><a href="https://claude.ai/artifact/JX93LsmiNmBVP49KE6nCF1" target="_blank" rel="noopener">Open the behavior spec →</a></header>
 <div class="banner"><b>Placeholder data.</b> Hub names, states and the W.K. Kellogg Foundation list are real. Topic tags, topic counts, descriptions (except four), website links and Aspen CSG features are stand-ins. Only Appalachia has a region boundary.</div>
 <div class="demos" aria-label="Jump to a scenario"><span>Jump to:</span><button type="button" data-demo="ny">New York</button><button type="button" data-demo="nfc">Hub card</button><button type="button" data-demo="app">Appalachia</button><button type="button" data-demo="mdc">MDC in Appalachia</button><button type="button" data-demo="topics">Two topics</button><button type="button" data-demo="kel">Kellogg</button><button type="button" data-demo="cu">Communities Unlimited</button><button type="button" data-demo="three">Kellogg + Indigenous</button><button type="button" data-demo="ct">State with no Hubs</button><button type="button" data-demo="none">No results</button></div>
+</section>
+<div class="buildtag">The map · this is what gets built</div>
 <main id="app" aria-label="Rural Development Hubs map"></main>
-<div class="dev"><span>URL for this view</span><code id="urlv"></code><span>Note</span><span>The build writes this to the address bar (replaceState for filters, pushState when a Hub opens). The prototype only displays it.</span></div>
+<section class="proto end" aria-label="Prototype-only notes"><div class="ptag">Prototype only · not part of the build</div><div class="dev"><span>URL for this view</span><code id="urlv"></code><span>Note</span><span>The build writes this to the address bar (replaceState for filters, pushState when a Hub opens). The prototype only displays it.</span></div></section>
 </div>
 <div id="live" class="sr" aria-live="polite"></div>
 <div id="toast" class="toast" role="status" hidden></div>
